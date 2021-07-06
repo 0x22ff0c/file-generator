@@ -6,9 +6,31 @@ import java.io.InputStreamReader;
 
 public class Validations{
 	
-	private String numberInput = ""; 
+	private String numberInput = "";
+	public String inputValue = "";
 	private boolean isDigit = false;
 	private boolean isInRange = false;
+	
+	public void checkInputLength(){
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		
+		String decision = "";
+		
+		if(inputValue.length() <= 1){
+			System.out.println("Warning: Input may be too short.");
+			
+			while(!decision.equals("Y") || !decision.equals("YES") || !decision.contains("YES")){
+				System.out.print("Do you want to proceed?");
+				
+				try {
+					decision = reader.readLine().toUpperCase();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	public void checkIfInputIsDigit(String testData){
 	
