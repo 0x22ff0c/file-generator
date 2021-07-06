@@ -4,14 +4,16 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		FileGenerator fileGenerator = new FileGenerator();
+		FileManager fileManager = new FileManager();
 		
-		fileGenerator.generateFile();
+		fileManager.generateFile();
 		
-		fileGenerator.addHeader("Sample text header");
+		fileManager.addHeader("Sample text header");
+		
+		fileManager.inputValue();
 		
 		Validations validate = new Validations();
-		
-		validate.checkIfInputIsDigitAndInRange("a");
+
+		validate.checkInputLength();
 	}
 }
