@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class FileManager {
 
@@ -12,6 +15,7 @@ public class FileManager {
 	private final String fileSeparator = System.getProperty("file.separator");
 	private final String listFileName = "list.txt";
 	private final String listTxtFileLocation = userDir + fileSeparator + listFileName;
+	public List<String> fileContentList = null;
 
 	public void generateFile(){
 		
@@ -41,8 +45,16 @@ public class FileManager {
 		}
 	}
 	
+	public void extractListFromFile(){
+		try {
+			fileContentList = Files.readAllLines(Paths.get(listTxtFileLocation));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void addHeader(String headerName){;
-
+	
 		try {
 			
 			FileWriter writer = new FileWriter(listTxtFileLocation);
@@ -71,4 +83,5 @@ public class FileManager {
 			e.printStackTrace();
 		}
 	}
+
 }
