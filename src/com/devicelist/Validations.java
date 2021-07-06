@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public class Validations{
 	
-	public String numberInput = ""; 
+	private String numberInput = ""; 
 	private boolean isDigit = false;
 	private boolean isInRange = false;
 	
