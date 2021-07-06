@@ -10,6 +10,31 @@ public class Validations{
 	public String inputValue = "";
 	private boolean isDigit = false;
 	private boolean isInRange = false;
+	public boolean doesHeaderExist = false;
+	
+	public boolean checkIfHeaderAlreadyExists() throws IndexOutOfBoundsException{
+		
+		doesHeaderExist = false;
+		
+		FileManager fileManager = new FileManager();
+		
+		fileManager.extractListFromFile();
+			
+		try {
+
+			String headerName = fileManager.fileContentList.get(0);
+			
+			if(headerName.length() > 1){
+				doesHeaderExist = true;
+				System.out.println(String.format("Header in the given text file: %s", headerName));
+			}
+			
+		} catch (IndexOutOfBoundsException indexOutOfBoundsException) {
+			System.out.println("Warning: Header in the given text file does not exist.");
+		}
+
+		return doesHeaderExist;
+	}
 	
 	public void checkInputLength(){
 		
