@@ -55,18 +55,27 @@ public class FileManager {
 	
 	public void addHeader(String headerName){;
 	
-		try {
-			
-			FileWriter writer = new FileWriter(listTxtFileLocation);
-			
-			writer.write(headerName);
-			
-			writer.close();
-			
-		} catch (IOException ioException){
-			ioException.printStackTrace();
-		}
+		Validations validations = new Validations();
 		
+		extractListFromFile();
+		
+		validations.checkIfHeaderAlreadyExists();
+		
+		if(validations.doesHeaderExist == false){
+			try {
+				
+				FileWriter writer = new FileWriter(listTxtFileLocation);
+				
+				writer.write(headerName);
+				
+				writer.close();
+				
+				System.out.println(String.format("Added header to file: %s | Header name value: %s", listFileName, headerName));
+				
+			} catch (IOException ioException){
+				ioException.printStackTrace();
+			}			
+		}
 	}
 	
 	public void inputValue(){
