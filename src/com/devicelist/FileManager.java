@@ -6,13 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class FileGenerator {
+public class FileManager {
 
 	private final String userDir = System.getProperty("user.dir");
 	private final String fileSeparator = System.getProperty("file.separator");
 	private final String listFileName = "list.txt";
 	private final String listTxtFileLocation = userDir + fileSeparator + listFileName;
-	
+
 	public void generateFile(){
 		
 		File listFile = new File(listTxtFileLocation);
@@ -40,7 +40,7 @@ public class FileGenerator {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void addHeader(String headerName){;
 
 		try {
