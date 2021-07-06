@@ -9,11 +9,6 @@ public class Main {
 		fileManager.generateFile();
 		
 		fileManager.addHeader("Sample text header");
-		
-		fileManager.inputValue();
-		
-		Validations validate = new Validations();
 
-		validate.checkInputLength();
 	}
 }
