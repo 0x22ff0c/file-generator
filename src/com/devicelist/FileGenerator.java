@@ -1,6 +1,7 @@
 package com.devicelist;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileGenerator {
@@ -37,5 +38,22 @@ public class FileGenerator {
 			e.printStackTrace();
 		}
 	}
+
+	public void addHeader(String headerName){;
+
+		try {
+			
+			FileWriter writer = new FileWriter(listTxtFileLocation);
+			
+			writer.write(headerName);
+			
+			writer.close();
+			
+		} catch (IOException ioException){
+			ioException.printStackTrace();
+		}
+		
+	}
+	
 	
 }

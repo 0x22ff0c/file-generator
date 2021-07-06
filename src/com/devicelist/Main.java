@@ -8,6 +8,8 @@ public class Main {
 		
 		fileGenerator.generateFile();
 		
+		fileGenerator.addHeader("Sample text header");
+		
 		Validations validate = new Validations();
 		
 		validate.checkIfInputIsDigitAndInRange("a");
