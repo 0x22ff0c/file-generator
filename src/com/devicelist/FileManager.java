@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class FileManager {
+public class FileManager extends Validations{
 
 	private final String userDir = System.getProperty("user.dir");
 	private final String fileSeparator = System.getProperty("file.separator");
@@ -53,6 +53,15 @@ public class FileManager {
 		}
 	}
 	
+	public void printTheList(){
+		
+		System.out.println(String.format("File content of: %s", listFileName));
+		
+		for(String listItem : fileContentList){
+			System.out.println(listItem);
+		}
+	}
+
 	public void addHeader(String headerName){;
 	
 		Validations validations = new Validations();
@@ -78,6 +87,31 @@ public class FileManager {
 		}
 	}
 	
+	public void promptToInputAValue(){
+		
+		String input = "";
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		
+		System.out.print("Do you want to input a value? ");
+
+		try {
+			input = reader.readLine().toUpperCase();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(input.equals("Y") || input.contains("YES")){
+			
+			inputValue();
+				
+		}else{
+			
+			printTheList();
+		}
+		
+	}
+	
 	public void inputValue(){
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -87,9 +121,13 @@ public class FileManager {
 		System.out.print("Input a value: ");
 		
 		try {
+			
 			validation.inputValue = reader.readLine();
+		
 		} catch (IOException e){
+			
 			e.printStackTrace();
+		
 		}
 	}
 
