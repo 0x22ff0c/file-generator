@@ -11,8 +11,10 @@ public class Validations{
 	private boolean isDigit = false;
 	private boolean isInRange = false;
 	public boolean doesHeaderExist = false;
+	public boolean decision = false;
+	public boolean metMinimumInputLength = false;
 	
-	public boolean checkIfHeaderAlreadyExists() throws IndexOutOfBoundsException{
+	protected boolean checkIfHeaderAlreadyExists() throws IndexOutOfBoundsException{
 		
 		doesHeaderExist = false;
 		
@@ -36,13 +38,14 @@ public class Validations{
 		return doesHeaderExist;
 	}
 	
-	public void checkInputLength(){
+	protected boolean checkInputLength(){
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
 		String decision = "";
 		
 		if(inputValue.length() <= 1){
+			
 			System.out.println("Warning: Input may be too short.");
 			
 			while(!decision.equals("Y") || !decision.equals("YES") || !decision.contains("YES")){
@@ -53,11 +56,21 @@ public class Validations{
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				
+				if(decision.equals("Y") || decision.equals("YES") || !decision.contains("YES")){
+					this.decision = true;
+					break;
+				}	
 			}
+			
+		}else{
+			metMinimumInputLength = true;
 		}
+		
+		return this.decision;
 	}
 	
-	public void checkIfInputIsDigit(String testData){
+	protected void checkIfInputIsDigit(String testData){
 	
 		numberInput = testData;
 		
@@ -85,7 +98,7 @@ public class Validations{
 		}
 	}
 	
-	public void checkIfInputIsInRange(){
+	protected void checkIfInputIsInRange(){
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
@@ -118,7 +131,7 @@ public class Validations{
 		}
 	}
 
-	public void checkIfInputIsDigitAndInRange(String testData){
+	protected void checkIfInputIsDigitAndInRange(String testData){
 		
 		numberInput = testData;
 		
