@@ -16,6 +16,7 @@ public class FileManager extends Validations{
 	private final String listFileName = "list.txt";
 	private final String listTxtFileLocation = userDir + fileSeparator + listFileName;
 	public List<String> fileContentList = null;
+	private int numberOfItems = 0;
 
 	public void generateFile(){
 		
@@ -54,6 +55,8 @@ public class FileManager extends Validations{
 	}
 	
 	public void printTheList(){
+		
+		extractListFromFile();
 		
 		System.out.println(String.format("File content of: %s", listFileName));
 		
@@ -103,13 +106,20 @@ public class FileManager extends Validations{
 		
 		if(input.equals("Y") || input.contains("YES")){
 			
-			inputValue();
-				
-		}else{
+			System.out.print("How many items do you want to input? ");
 			
-			printTheList();
-		}
+			try {
+				numberOfItems = Integer.parseInt(reader.readLine());
+				inputValue();
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			} catch (IOException e){
+				e.printStackTrace();
+			}
+				
+		}	
 		
+		printTheList();
 	}
 	
 	public void inputValue(){
@@ -118,17 +128,38 @@ public class FileManager extends Validations{
 		
 		Validations validation = new Validations();
 		
-		System.out.print("Input a value: ");
-		
-		try {
+		for(int iteration = 1; iteration <= numberOfItems; iteration++){
 			
-			validation.inputValue = reader.readLine();
-		
-		} catch (IOException e){
+			System.out.print("Input a value: ");
 			
-			e.printStackTrace();
-		
+			try {
+				
+				validation.inputValue = reader.readLine();
+				
+				if(validation.checkInputLength() == true || validation.metMinimumInputLength == true){
+					
+					try {
+						
+						FileWriter writer = new FileWriter(listTxtFileLocation, true);
+						
+						writer.write(System.lineSeparator());
+						
+						writer.write(validation.inputValue);
+						
+						writer.close();
+						
+					} catch (IOException ioexception){
+						ioexception.printStackTrace();
+					}
+					
+				}
+				
+			} catch (IOException e){
+				
+				e.printStackTrace();
+				
+			}
 		}
+		
 	}
-
 }
