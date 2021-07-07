@@ -8,7 +8,8 @@ public class Main {
 		
 		fileManager.generateFile();
 		
-		fileManager.addHeader("Sample text header");
+		fileManager.addHeader("Grocery list items:");
 
+		fileManager.promptToInputAValue();
 	}
 }
