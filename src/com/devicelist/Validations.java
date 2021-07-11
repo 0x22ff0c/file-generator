@@ -7,24 +7,48 @@ import java.io.InputStreamReader;
 public class Validations{
 	
 	private String numberInput = "";
-	public String inputValue = "";
+	private String inputValue = "";
 	private boolean isDigit = false;
 	private boolean isInRange = false;
-	public boolean doesHeaderExist = false;
-	public boolean decision = false;
-	public boolean metMinimumInputLength = false;
+	private boolean doesHeaderExist = false;
+	private boolean decision = false;
+	private boolean metMinimumInputLength = false;
 	
+	public String getInputValue(){
+		return inputValue;
+	}
+	
+	public void setInputValue(String inputValue){
+		this.inputValue = inputValue;
+	}
+	
+	public boolean getDoesHeaderExistResult(){
+		return doesHeaderExist;
+	}
+	
+	public void setDoesHeaderExistValue(boolean doesHeaderExist){
+		this.doesHeaderExist = doesHeaderExist;
+	}
+	
+	public boolean getMetMinInputLengthResult(){
+		return metMinimumInputLength;
+	}
+	
+	public void setMetMinInputLengthResult(boolean metMiniumumInputLength){
+		this.metMinimumInputLength = metMiniumumInputLength;
+	}
+		
 	protected boolean checkIfHeaderAlreadyExists() throws IndexOutOfBoundsException{
 		
 		doesHeaderExist = false;
-		
+
 		FileManager fileManager = new FileManager();
 		
 		fileManager.extractListFromFile();
 			
 		try {
 
-			String headerName = fileManager.fileContentList.get(0);
+			String headerName = fileManager.getFileContentList().get(0);
 			
 			if(headerName.length() > 1){
 				doesHeaderExist = true;
@@ -42,23 +66,23 @@ public class Validations{
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
-		String decision = "";
+		String userDecision = "";
 		
 		if(inputValue.length() <= 1){
 			
 			System.out.println("Warning: Input may be too short.");
 			
-			while(!decision.equals("Y") || !decision.equals("YES") || !decision.contains("YES")){
+			while(!userDecision.equals("Y") || !userDecision.equals("YES") || !userDecision.contains("YES")){
 				System.out.print("Do you want to proceed?");
 				
 				try {
-					decision = reader.readLine().toUpperCase();
+					userDecision = reader.readLine().toUpperCase();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				
-				if(decision.equals("Y") || decision.equals("YES") || !decision.contains("YES")){
-					this.decision = true;
+				if(userDecision.equals("Y") || userDecision.equals("YES") || !userDecision.contains("YES")){
+					decision = true;
 					break;
 				}	
 			}
@@ -78,7 +102,7 @@ public class Validations{
 		
 		if(!testData.matches("\\d+")){
 	
-			while(isDigit == false){
+			while(isDigit != true){
 
 				System.out.println("Error: Input is not a digit.");
 				
@@ -135,13 +159,13 @@ public class Validations{
 		
 		numberInput = testData;
 		
-		while (isDigit == false && isInRange == false){
+		while (!isDigit && !isInRange){
 			
-			if(isDigit == false){
+			if(!isDigit){
 				checkIfInputIsDigit(numberInput);
 			}
 			
-			if(isInRange == false){
+			if(!isInRange){
 				checkIfInputIsInRange();
 			}
 		}	
