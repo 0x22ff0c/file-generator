@@ -9,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class FileManager extends Validations{
 
 	private static final String CURRENT_USER_DIRECTORY = System.getProperty("user.dir");
@@ -18,6 +21,8 @@ public class FileManager extends Validations{
 	private List<String> fileContentList = null;
 	private int numberOfItems = 0;
 
+	private static final Logger LOGGER = LogManager.getLogger(FileManager.class);
+	
 	public List<String> getFileContentList(){
 		return fileContentList;
 	}
@@ -34,24 +39,23 @@ public class FileManager extends Validations{
 			
 			if(!listFile.exists()){
 				
-				System.out.println(String.format("Creating file: %s...", FILE_NAME));
+				LOGGER.debug(String.format("Creating file: %s..,", FILE_NAME));
 				
 				if(listFile.createNewFile()){
 					
-					System.out.println(String.format("Created file: %s.", FILE_NAME));
+					LOGGER.debug(String.format("Created file: %s", FILE_NAME));
 					
-					System.out.println(String.format("File location: %s", FILE_LOCATION));
+					LOGGER.debug(String.format("File location: %s", FILE_LOCATION));
+					
 				}
-				
-			}else{
-				
-				System.out.println(String.format("File location: %s", FILE_LOCATION));
-				
+
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		LOGGER.debug(String.format("File location: %s", FILE_LOCATION)); 	
 	}
 	
 	public void extractListFromFile(){
