@@ -11,33 +11,41 @@ import java.util.List;
 
 public class FileManager extends Validations{
 
-	private final String userDir = System.getProperty("user.dir");
-	private final String fileSeparator = System.getProperty("file.separator");
-	private final String listFileName = "list.txt";
-	private final String listTxtFileLocation = userDir + fileSeparator + listFileName;
-	public List<String> fileContentList = null;
+	private static final String CURRENT_USER_DIRECTORY = System.getProperty("user.dir");
+	private static final String FILE_SEPARATOR = System.getProperty("file.separator");
+	private static final String FILE_NAME = "list.txt";
+	private static final String FILE_LOCATION = CURRENT_USER_DIRECTORY + FILE_SEPARATOR + FILE_NAME;
+	private List<String> fileContentList = null;
 	private int numberOfItems = 0;
 
+	public List<String> getFileContentList(){
+		return fileContentList;
+	}
+	
+	public void setFileContentList(List<String> fileContentList){
+		this.fileContentList = fileContentList;
+	}		
+	
 	public void generateFile(){
 		
-		File listFile = new File(listTxtFileLocation);
+		File listFile = new File(FILE_LOCATION);
 		
 		try {
 			
 			if(!listFile.exists()){
 				
-				System.out.println(String.format("Creating file: %s...", listFileName));
+				System.out.println(String.format("Creating file: %s...", FILE_NAME));
 				
 				if(listFile.createNewFile()){
 					
-					System.out.println(String.format("Created file: %s.", listFileName));
+					System.out.println(String.format("Created file: %s.", FILE_NAME));
 					
-					System.out.println(String.format("File location: %s", listTxtFileLocation));
+					System.out.println(String.format("File location: %s", FILE_LOCATION));
 				}
 				
 			}else{
 				
-				System.out.println(String.format("File location: %s", listTxtFileLocation));
+				System.out.println(String.format("File location: %s", FILE_LOCATION));
 				
 			}
 			
@@ -48,24 +56,25 @@ public class FileManager extends Validations{
 	
 	public void extractListFromFile(){
 		try {
-			fileContentList = Files.readAllLines(Paths.get(listTxtFileLocation));
+			fileContentList = Files.readAllLines(Paths.get(FILE_LOCATION));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	public void printTheList(){
 		
 		extractListFromFile();
 		
-		System.out.println(String.format("File content of: %s", listFileName));
+		System.out.println(String.format("File content of: %s", FILE_NAME));
 		
 		for(String listItem : fileContentList){
 			System.out.println(listItem);
 		}
 	}
 
-	public void addHeader(String headerName){;
+	public void addHeader(String headerName){
 	
 		Validations validations = new Validations();
 		
@@ -73,24 +82,22 @@ public class FileManager extends Validations{
 		
 		validations.checkIfHeaderAlreadyExists();
 		
-		if(validations.doesHeaderExist == false){
-			try {
-				
-				FileWriter writer = new FileWriter(listTxtFileLocation);
+		if(validations.getDoesHeaderExistResult() == false){
+			
+			try(FileWriter writer = new FileWriter(FILE_LOCATION)){
 				
 				writer.write(headerName);
 				
-				writer.close();
-				
-				System.out.println(String.format("Added header to file: %s | Header name value: %s", listFileName, headerName));
+				System.out.println(String.format("Added header to file: %s | Header name value: %s", FILE_NAME, headerName));
 				
 			} catch (IOException ioException){
+				
 				ioException.printStackTrace();
-			}			
+			}		
 		}
 	}
 	
-	public void promptToInputAValue(){
+	public void askUserAnInput(){
 		
 		String input = "";
 		
@@ -134,24 +141,19 @@ public class FileManager extends Validations{
 			
 			try {
 				
-				validation.inputValue = reader.readLine();
+				validation.setInputValue(reader.readLine());
 				
-				if(validation.checkInputLength() == true || validation.metMinimumInputLength == true){
+				if(validation.checkInputLength() == true || validation.getMetMinInputLengthResult() == true){
 					
-					try {
-						
-						FileWriter writer = new FileWriter(listTxtFileLocation, true);
+					try (FileWriter writer = new FileWriter(FILE_LOCATION, true)){
 						
 						writer.write(System.lineSeparator());
 						
-						writer.write(validation.inputValue);
-						
-						writer.close();
+						writer.write(validation.getInputValue());
 						
 					} catch (IOException ioexception){
 						ioexception.printStackTrace();
 					}
-					
 				}
 				
 			} catch (IOException e){
