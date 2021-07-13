@@ -140,23 +140,16 @@ public class FileManager extends Validations{
 		
 		for(int iteration = 1; iteration <= numberOfItems; iteration++){
 			
-			System.out.print("Input a value: ");
+			LOGGER.info("Input a value: ");
 			
 			try {
 				
 				validation.setInputValue(reader.readLine());
 				
-				if(validation.checkInputLength() == true || validation.getMetMinInputLengthResult() == true){
+				if(validation.checkInputLength() || validation.getMetMinInputLengthResult()){
+
+					appendValueToFile();
 					
-					try (FileWriter writer = new FileWriter(FILE_LOCATION, true)){
-						
-						writer.write(System.lineSeparator());
-						
-						writer.write(validation.getInputValue());
-						
-					} catch (IOException ioexception){
-						ioexception.printStackTrace();
-					}
 				}
 				
 			} catch (IOException e){
@@ -165,6 +158,21 @@ public class FileManager extends Validations{
 				
 			}
 		}
+	}
+	
+	private void appendValueToFile(){
 		
+		Validations validation = new Validations();
+		
+		try (FileWriter writer = new FileWriter(FILE_LOCATION, true)){
+			
+			writer.write(System.lineSeparator());
+			
+			writer.write(validation.getInputValue());
+			
+		} catch (IOException ioexception){
+			
+			ioexception.printStackTrace();
+		}		
 	}
 }
