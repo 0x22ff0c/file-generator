@@ -108,7 +108,7 @@ public class FileManager extends Validations{
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
-		System.out.print("Do you want to input a value? ");
+		LOGGER.info("Do you want to input a value? ");
 
 		try {
 			input = reader.readLine().toUpperCase();
@@ -118,14 +118,12 @@ public class FileManager extends Validations{
 		
 		if(input.equals("Y") || input.contains("YES")){
 			
-			System.out.print("How many items do you want to input? ");
+			LOGGER.info("How many items do you want to input? ");
 			
 			try {
 				numberOfItems = Integer.parseInt(reader.readLine());
 				inputValue();
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (IOException e){
+			} catch (NumberFormatException | IOException e) {
 				e.printStackTrace();
 			}
 				
