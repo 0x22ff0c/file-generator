@@ -20,6 +20,7 @@ public class FileManager extends Validations{
 	private static final String FILE_LOCATION = CURRENT_USER_DIRECTORY + FILE_SEPARATOR + FILE_NAME;
 	private List<String> fileContentList = null;
 	private int numberOfItems = 0;
+	private String headerName = "";
 
 	private static final Logger LOGGER = LogManager.getLogger(FileManager.class);
 	
@@ -72,28 +73,36 @@ public class FileManager extends Validations{
 		
 		extractListFromFile();
 		
-		System.out.println(String.format("File content of: %s", FILE_NAME));
+		LOGGER.info("File content of: {}", FILE_NAME);
+		
+		int itemNum = 1;
 		
 		for(String listItem : fileContentList){
-			System.out.println(listItem);
+			
+			if(!listItem.matches(headerName)){
+				
+				LOGGER.info("Item number: {} | Value: {}", itemNum, listItem);
+		
+				itemNum++;
+			}			
 		}
 	}
 
 	public void addHeader(String headerName){
 	
-		Validations validations = new Validations();
+		this.headerName = headerName;
 		
 		extractListFromFile();
 		
-		validations.checkIfHeaderAlreadyExists();
+		checkIfHeaderAlreadyExists();
 		
-		if(!validations.getDoesHeaderExistResult()){
+		if(!getDoesHeaderExistResult()){
 			
 			try(FileWriter writer = new FileWriter(FILE_LOCATION)){
 				
-				writer.write(headerName);
+				writer.write(this.headerName);
 				
-				LOGGER.info("Added header to file: {} | Header name: \"{}\"", FILE_NAME, headerName);
+				LOGGER.info("Added header to file: {} | Header name: \"{}\"", FILE_NAME, this.headerName);
 			
 			} catch (IOException ioException){
 				
@@ -128,25 +137,21 @@ public class FileManager extends Validations{
 			}
 				
 		}	
-		
-		printTheList();
 	}
 	
 	public void inputValue(){
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
-		Validations validation = new Validations();
-		
 		for(int iteration = 1; iteration <= numberOfItems; iteration++){
 			
 			LOGGER.info("Input a value: ");
 			
 			try {
+
+				setInputValue(reader.readLine());
 				
-				validation.setInputValue(reader.readLine());
-				
-				if(validation.checkInputLength() || validation.getMetMinInputLengthResult()){
+				if(checkInputLength() || getMetMinInputLengthResult()){
 
 					appendValueToFile();
 					
@@ -162,13 +167,11 @@ public class FileManager extends Validations{
 	
 	private void appendValueToFile(){
 		
-		Validations validation = new Validations();
-		
 		try (FileWriter writer = new FileWriter(FILE_LOCATION, true)){
 			
 			writer.write(System.lineSeparator());
 			
-			writer.write(validation.getInputValue());
+			writer.write(getInputValue());
 			
 		} catch (IOException ioexception){
 			
