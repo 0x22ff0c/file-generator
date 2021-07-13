@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Validations{
 	
 	private String numberInput = "";
@@ -13,6 +16,8 @@ public class Validations{
 	private boolean doesHeaderExist = false;
 	private boolean decision = false;
 	private boolean metMinimumInputLength = false;
+	
+	private static final Logger LOGGER = LogManager.getLogger(Validations.class);
 	
 	public String getInputValue(){
 		return inputValue;
@@ -51,12 +56,17 @@ public class Validations{
 			String headerName = fileManager.getFileContentList().get(0);
 			
 			if(headerName.length() > 1){
+				
 				doesHeaderExist = true;
-				System.out.println(String.format("Header in the given text file: %s", headerName));
+				
+				LOGGER.info("Header of the file: \"{}\"", headerName);
+				
 			}
 			
 		} catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-			System.out.println("Warning: Header in the given text file does not exist.");
+			
+			LOGGER.warn("Header in the given file does not exist.");
+			
 		}
 
 		return doesHeaderExist;
