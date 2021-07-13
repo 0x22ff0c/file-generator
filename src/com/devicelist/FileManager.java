@@ -39,13 +39,13 @@ public class FileManager extends Validations{
 			
 			if(!listFile.exists()){
 				
-				LOGGER.debug(String.format("Creating file: %s..,", FILE_NAME));
-				
+				LOGGER.info("Creating file: {}...", FILE_NAME);
+
 				if(listFile.createNewFile()){
 					
-					LOGGER.debug(String.format("Created file: %s", FILE_NAME));
+					LOGGER.info("Created file: {}", FILE_NAME);
 					
-					LOGGER.debug(String.format("File location: %s", FILE_LOCATION));
+					LOGGER.info("File location: {}", FILE_LOCATION);
 					
 				}
 
@@ -55,7 +55,7 @@ public class FileManager extends Validations{
 			e.printStackTrace();
 		}
 
-		LOGGER.debug(String.format("File location: %s", FILE_LOCATION)); 	
+		LOGGER.info("File location: {}", FILE_LOCATION); 	
 	}
 	
 	public void extractListFromFile(){
