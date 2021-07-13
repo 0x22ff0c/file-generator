@@ -48,14 +48,15 @@ public class FileManager extends Validations{
 					LOGGER.info("File location: {}", FILE_LOCATION);
 					
 				}
-
+			}else {
+				
+				LOGGER.info("File location: {}", FILE_LOCATION); 	
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		LOGGER.info("File location: {}", FILE_LOCATION); 	
 	}
 	
 	public void extractListFromFile(){
@@ -86,14 +87,14 @@ public class FileManager extends Validations{
 		
 		validations.checkIfHeaderAlreadyExists();
 		
-		if(validations.getDoesHeaderExistResult() == false){
+		if(!validations.getDoesHeaderExistResult()){
 			
 			try(FileWriter writer = new FileWriter(FILE_LOCATION)){
 				
 				writer.write(headerName);
 				
-				System.out.println(String.format("Added header to file: %s | Header name value: %s", FILE_NAME, headerName));
-				
+				LOGGER.info("Added header to file: {} | Header name: \"{}\"", FILE_NAME, headerName);
+			
 			} catch (IOException ioException){
 				
 				ioException.printStackTrace();
