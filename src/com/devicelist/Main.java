@@ -9,5 +9,9 @@ public class Main {
 		fileManager.generateFile();
 		
 		fileManager.addHeader("Device List:");
+		
+		fileManager.askUserAnInput();
+		
+		fileManager.printTheList();
 	}
 }
