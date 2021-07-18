@@ -147,7 +147,7 @@ public class Validations{
 					LOGGER.error("Number should be between {} and {}", minimumListItemNumber, maximumListItemNumber);
 				
 					LOGGER.info("Enter a number between {} and {}", minimumListItemNumber, maximumListItemNumber);
-					
+
 					numberInput = reader.readLine();
 					
 					rangeNumber = Integer.parseInt(numberInput);
