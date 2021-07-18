@@ -61,12 +61,16 @@ public class FileManager extends Validations{
 	}
 	
 	public void extractListFromFile(){
-		try {
-			fileContentList = Files.readAllLines(Paths.get(FILE_LOCATION));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
+		try {
+			
+			fileContentList = Files.readAllLines(Paths.get(FILE_LOCATION));
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		
+		}
 	}
 	
 	public void printTheList(){
@@ -111,61 +115,81 @@ public class FileManager extends Validations{
 		}
 	}
 	
-	public void askUserAnInput(){
+	public void askUserIfItWantsToAddItemsOnTheList(){
 		
-		String input = "";
+		String decision = "";
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
-		LOGGER.info("Do you want to input a value? ");
+		LOGGER.info("Do you want to add items on the list? ");
 
 		try {
-			input = reader.readLine().toUpperCase();
+			decision = reader.readLine().toUpperCase();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		if(input.equals("Y") || input.contains("YES")){
+		if(decision.equals("Y") || decision.contains("YES")){
 			
-			LOGGER.info("How many items do you want to input? ");
-			
-			try {
-				numberOfItems = Integer.parseInt(reader.readLine());
-				inputValue();
-			} catch (NumberFormatException | IOException e) {
-				e.printStackTrace();
-			}
-				
+			askUserHowManyItemsToAdd();
 		}	
 	}
 	
-	public void inputValue(){
+	private void askUserHowManyItemsToAdd(){
+		
+		String numberOfITems = "";
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
-		for(int iteration = 1; iteration <= numberOfItems; iteration++){
+		LOGGER.info("How many items do you wish to add? ");
+	
+		try {
+			numberOfITems = reader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(checkIfInputIsDigit(numberOfITems)){
 			
-			LOGGER.info("Input a value: ");
-			
-			try {
+			this.numberOfItems = Integer.parseInt(getInputValue());
+		
+		}
+	}
 
-				setInputValue(reader.readLine());
+	public void addItemsOnTheList(){
+		
+		if(numberOfItems != 0){
+		
+			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+			
+			for(int iteration = 1; iteration <= numberOfItems; iteration++){
 				
-				if(checkInputLength() || getMetMinInputLengthResult()){
+				LOGGER.info("Input a value: ");
+				
+				try {
+						
+					setInputValue(reader.readLine());
 
-					appendValueToFile();
+					while(!doesInputLengthMeetMinRequiredLength()){
+						
+						LOGGER.info("Input another value: ");
+						
+						setInputValue(reader.readLine());
+						
+					}
+					
+					addValueToTheList();
+					
+				} catch (IOException e){
+					
+					e.printStackTrace();
 					
 				}
-				
-			} catch (IOException e){
-				
-				e.printStackTrace();
-				
 			}
 		}
 	}
 	
-	private void appendValueToFile(){
+	private void addValueToTheList(){
 		
 		try (FileWriter writer = new FileWriter(FILE_LOCATION, true)){
 			
@@ -178,4 +202,27 @@ public class FileManager extends Validations{
 			ioexception.printStackTrace();
 		}		
 	}
+
+	public void askUserAnInputForItemNumber(){
+		
+		String input = "";
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		
+		LOGGER.info("Enter the item number you wish appium to run on: ");
+		
+		try {
+			input = reader.readLine();
+		
+			if(checkIfInputIsDigitAndInRange(input)){
+				
+				LOGGER.info("You selected: {}", getInputValue());
+			
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
+	
 }
