@@ -10,7 +10,9 @@ public class Main {
 		
 		fileManager.addHeader("Device List:");
 		
-		fileManager.askUserAnInput();
+		fileManager.askUserIfItWantsToAddItemsOnTheList();
+		
+		fileManager.addItemsOnTheList();
 		
 		fileManager.printTheList();
 	}
