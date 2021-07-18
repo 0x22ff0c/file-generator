@@ -3,6 +3,7 @@ package com.devicelist;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +15,6 @@ public class Validations{
 	private boolean isDigit = false;
 	private boolean isInRange = false;
 	private boolean doesHeaderExist = false;
-	private boolean decision = false;
 	private boolean metMinimumInputLength = false;
 	
 	private static final Logger LOGGER = LogManager.getLogger(Validations.class);
@@ -72,39 +72,24 @@ public class Validations{
 		return doesHeaderExist;
 	}
 	
-	protected boolean checkInputLength(){
+	protected boolean doesInputLengthMeetMinRequiredLength(){
 		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		
-		String userDecision = "";
+		metMinimumInputLength = false;
 		
 		if(inputValue.length() <= 1){
 			
-			System.out.println("Warning: Input may be too short.");
-			
-			while(!userDecision.equals("Y") || !userDecision.equals("YES") || !userDecision.contains("YES")){
-				System.out.print("Do you want to proceed?");
-				
-				try {
-					userDecision = reader.readLine().toUpperCase();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				if(userDecision.equals("Y") || userDecision.equals("YES") || !userDecision.contains("YES")){
-					decision = true;
-					break;
-				}	
-			}
+			LOGGER.error("Input is too short.");
 			
 		}else{
+			
 			metMinimumInputLength = true;
+		
 		}
 		
-		return this.decision;
+		return metMinimumInputLength;
 	}
 	
-	protected void checkIfInputIsDigit(String testData){
+	protected boolean checkIfInputIsDigit(String testData){
 	
 		numberInput = testData;
 		
@@ -112,11 +97,11 @@ public class Validations{
 		
 		if(!testData.matches("\\d+")){
 	
-			while(isDigit != true){
+			while(!isDigit){
 
-				System.out.println("Error: Input is not a digit.");
+				LOGGER.error("Input is not a digit.");
 				
-				System.out.print("Enter a number: ");
+				LOGGER.info("Enter a number: ");
 				
 				try {
 					numberInput = reader.readLine();
@@ -126,33 +111,53 @@ public class Validations{
 				
 				if(numberInput.matches("\\d+")){
 					isDigit = true;
+					setInputValue(numberInput);
 				}
 			}
-			
+		}else {
+			isDigit = true;
+			setInputValue(numberInput);
 		}
+		
+		return isDigit;
 	}
 	
-	protected void checkIfInputIsInRange(){
+	protected boolean checkIfInputIsInRange(){
+		
+		FileManager fileManager = new FileManager();
+		
+		fileManager.extractListFromFile();
+		
+		List<String> extractedArrayList = fileManager.getFileContentList();
+		
+		int minimumListItemNumber = 1;
+		
+		int maximumListItemNumber = extractedArrayList.size() - 1;
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
 		try {
 			
-			int rangeNumber = Integer.parseInt(numberInput);
+			int rangeNumber = Integer.parseInt(getInputValue());
 			
-			if(rangeNumber == 0 || rangeNumber > 10){
+			if(rangeNumber == 0 || rangeNumber > maximumListItemNumber){
 				
-				while(isInRange == false){
-					System.out.println("Error: Number should be between 1 and 9.");
+				while(!isInRange){
+					
+					LOGGER.error("Number should be between {} and {}", minimumListItemNumber, maxiumumListItemNumber);
 				
-					System.out.print("Enter a number between 1 and 9: ");
+					LOGGER.info("Enter a number between {} and {}", minimumListItemNumber, maxiumumListItemNumber);
 					
 					numberInput = reader.readLine();
 					
 					rangeNumber = Integer.parseInt(numberInput);
 					
-					if(rangeNumber != 0 && rangeNumber < 10){
+					if(rangeNumber != 0 && rangeNumber < maximumListItemNumber){
+						
 						isInRange = true;
+						
+						setInputValue(String.valueOf(rangeNumber));
+					
 					}
 				}
 			}
@@ -163,21 +168,27 @@ public class Validations{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return isInRange;
 	}
 
-	protected void checkIfInputIsDigitAndInRange(String testData){
+	protected boolean checkIfInputIsDigitAndInRange(String testData){
+		
+		boolean isDigitAndInRange = false;
 		
 		numberInput = testData;
 		
-		while (!isDigit && !isInRange){
+		if(!checkIfInputIsInRange()){
 			
-			if(!isDigit){
-				checkIfInputIsDigit(numberInput);
-			}
-			
-			if(!isInRange){
+			while (!checkIfInputIsInRange()){
+				
 				checkIfInputIsInRange();
-			}
-		}	
+			}	
+		}else {
+			
+			isDigitAndInRange = true;
+		}
+		
+		return isDigitAndInRange;
 	}
 }
