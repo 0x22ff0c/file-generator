@@ -15,5 +15,11 @@ public class Main {
 		fileManager.addItemsOnTheList();
 		
 		fileManager.printTheList();
+		
+		fileManager.askUserAnInputForItemNumber();
+
+		fileManager.printSelectedItemOnTheList();
+		
+		fileManager.markSelectedItemOnTheList();
 	}
 }
