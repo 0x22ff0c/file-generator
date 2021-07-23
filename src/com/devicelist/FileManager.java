@@ -2,6 +2,8 @@ package com.devicelist;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +23,7 @@ public class FileManager extends Validations{
 	private List<String> fileContentList = null;
 	private int numberOfItems = 0;
 	private String headerName = "";
+	private int itemNumber = 0;
 
 	private static final Logger LOGGER = LogManager.getLogger(FileManager.class);
 	
@@ -204,25 +207,74 @@ public class FileManager extends Validations{
 	}
 
 	public void askUserAnInputForItemNumber(){
-		
-		String input = "";
-		
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
 		LOGGER.info("Enter the item number you wish appium to run on: ");
 		
 		try {
-			input = reader.readLine();
 		
-			if(checkIfInputIsDigitAndInRange(input)){
-				
-				LOGGER.info("You selected: {}", getInputValue());
+			setInputValue(reader.readLine());
 			
-			}
+			checkIfInputIsDigit(getInputValue());
 			
+			checkIfInputIsInRange();
+
 		} catch (IOException e) {
+			
 			e.printStackTrace();
+		
 		}	
 	}
 	
+	public void printSelectedItemOnTheList(){
+		
+		itemNumber = Integer.parseInt(getInputValue());
+		
+		LOGGER.info("Appium will connect to this device id: {}", getFileContentList().get(itemNumber));
+		
+	}
+	
+	public void markSelectedItemOnTheList(){
+		
+		String inputString = "";
+		
+		String itemValue = getFileContentList().get(itemNumber);
+		
+		try (BufferedReader reader = new BufferedReader(new FileReader(FILE_LOCATION))){
+			
+			StringBuilder stringBuffer = new StringBuilder();
+			
+			String line;
+			
+			while((line = reader.readLine()) != null){
+				stringBuffer.append(line.trim());
+				stringBuffer.append(System.lineSeparator());
+			}
+			
+			inputString = stringBuffer.toString();
+
+			if(inputString.contains("[run]")){
+				inputString = inputString.replace("[run] ", "");				
+			}
+			
+			inputString = inputString.replace(itemValue, "[run] " + itemValue);
+			
+			//Remove extra line separator obtained when we add extracted lines to stringBuffer variable.
+			inputString = inputString.substring(0, inputString.length() - 1);
+			
+		} catch (IOException e){
+			
+			e.printStackTrace();
+		}	
+		
+		try (FileOutputStream fileOutputStream = new FileOutputStream(new File(FILE_LOCATION))){
+			
+			fileOutputStream.write(inputString.getBytes());	
+			
+		} catch (IOException e){
+			
+			e.printStackTrace();
+		}
+	}
 }
