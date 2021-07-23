@@ -12,10 +12,10 @@ public class Validations{
 	
 	private String numberInput = "";
 	private String inputValue = "";
-	private boolean isDigit = false;
 	private boolean isInRange = false;
 	private boolean doesHeaderExist = false;
 	private boolean metMinimumInputLength = false;
+	private int minimumListItemNumber = 1;
 	
 	private static final Logger LOGGER = LogManager.getLogger(Validations.class);
 	
@@ -91,11 +91,15 @@ public class Validations{
 	
 	protected boolean checkIfInputIsDigit(String testData){
 	
-		numberInput = testData;
+		if(!testData.isEmpty()){
+			numberInput = testData;
+		}
+		
+		boolean isDigit = false;
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
-		if(!testData.matches("\\d+")){
+		if(!numberInput.matches("\\d+")){
 	
 			while(!isDigit){
 
@@ -121,24 +125,27 @@ public class Validations{
 		
 		return isDigit;
 	}
+
+	protected boolean checkIfInputIsDigit(){
+		return checkIfInputIsDigit("");
+	}
 	
 	protected boolean checkIfInputIsInRange(){
-		
+
 		FileManager fileManager = new FileManager();
 		
-		fileManager.extractListFromFile();
+		fileManager.extractListFromFile(); 
 		
-		List<String> extractedArrayList = fileManager.getFileContentList();
+		List<String> extractedList = fileManager.getFileContentList();
 		
-		int minimumListItemNumber = 1;
-		
-		int maximumListItemNumber = extractedArrayList.size() - 1;
-		
+		int maximumListItemNumber = extractedList.size() - 1;
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
 		try {
 			
-			int rangeNumber = Integer.parseInt(getInputValue());
+			//this should not throw any exception since while loop will catch if the numberInput is not a digit.
+			int rangeNumber = Integer.parseInt(numberInput);
 			
 			if(rangeNumber == 0 || rangeNumber > maximumListItemNumber){
 				
@@ -150,45 +157,32 @@ public class Validations{
 
 					numberInput = reader.readLine();
 					
+					if(!numberInput.matches("\\d+")){
+						
+						checkIfInputIsDigit();
+					
+					}
+
 					rangeNumber = Integer.parseInt(numberInput);
 					
-					if(rangeNumber != 0 && rangeNumber < maximumListItemNumber){
-						
-						isInRange = true;
-						
+
+					if(rangeNumber != 0 && rangeNumber <= maximumListItemNumber){
+												
 						setInputValue(String.valueOf(rangeNumber));
 					
+						LOGGER.info("Selected number: {}", numberInput);
+						
+						isInRange = true;
 					}
 				}
 			}
 		
-		} catch (NumberFormatException numberFormatException){
-			checkIfInputIsDigit(numberInput);
-			isDigit = false;
 		} catch (IOException e) {
+			
 			e.printStackTrace();
+		
 		}
 		
 		return isInRange;
-	}
-
-	protected boolean checkIfInputIsDigitAndInRange(String testData){
-		
-		boolean isDigitAndInRange = false;
-		
-		numberInput = testData;
-		
-		if(!checkIfInputIsInRange()){
-			
-			while (!checkIfInputIsInRange()){
-				
-				checkIfInputIsInRange();
-			}	
-		}else {
-			
-			isDigitAndInRange = true;
-		}
-		
-		return isDigitAndInRange;
 	}
 }
